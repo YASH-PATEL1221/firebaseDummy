@@ -2,8 +2,7 @@ import React from 'react';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { collection,addDoc, getFirestore } from "firebase/firestore";
+import  { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, updateDoc,onSnapshot } from "firebase/firestore"
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -22,20 +21,50 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
-try{
-    const addDocment = addDoc(collection(db,"users"),{
-        name:"gattu",
-        last:"patel",
-        born:2003
-    })
-    console.log("doc ID",addDocment.id);
+async function addData(name,last,born){
+  try {
+    const docRef = await addDoc(collection(db,"users"),{
+      name : name,
+      last : last,
+      born : born
+    });
+  
+    console.log("document id",docRef.id);
+  } catch (error) {
+    console.log(error);
+  }
 }
-catch(e){
-    console.log(e);
+
+addData("arrow","finch",2004);
+
+async function getData(){
+    const query = await getDocs(collection(db,"users"));
+    console.log(query.docs.map(doc => doc.data()));
 }
+
+getData();
+
+
+// To get single doc
+onSnapshot(doc(db,"users","CuQTkwB9gq07Z98neKo1") , (doc) => {   
+    console.log("data ", doc.data());
+})
+
+
+// update document
+const documentRef = doc(db,"users","XGDtWDqmcIaKiyEEx8ka");
+
+updateDoc(documentRef,{
+  name:"jenil patel"
+});
+
+
+// update document
+deleteDoc(documentRef);
+
+
 
 
 function Firebaseapp() {

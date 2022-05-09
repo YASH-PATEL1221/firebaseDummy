@@ -4,7 +4,7 @@ import Firebaseapp from './Firebaseapp';
 function App() {
   return (
     <div className="App">
-      <Firebaseapp></Firebaseapp>
+      <Firebaseapp/>
     </div>
   );
 }
